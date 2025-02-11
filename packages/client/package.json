@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "51.0.0",
+  "version": "51.1.0",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "@iconify-json/carbon": "catalog:",
     "@iconify-json/ph": "catalog:",
     "@iconify-json/svg-spinners": "catalog:",
+    "@shikijs/engine-javascript": "catalog:",
     "@shikijs/monaco": "catalog:",
     "@shikijs/vitepress-twoslash": "catalog:",
     "@slidev/parser": "workspace:*",
