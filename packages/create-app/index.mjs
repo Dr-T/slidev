@@ -7,7 +7,7 @@ import path from 'node:path'
 // @ts-check
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
@@ -117,7 +117,7 @@ async function init() {
       name: 'agent',
       type: 'select',
       message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm'].map(i => ({ value: i, title: i })),
+      choices: ['npm', 'yarn', 'pnpm', 'bun'].map(i => ({ value: i, title: i })),
     })
 
     if (!agent)

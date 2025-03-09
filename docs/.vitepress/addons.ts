@@ -137,6 +137,28 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/kaakaa/slidev-addon-rabbit',
   },
+  {
+    id: 'slidev-addon-stem',
+    name: 'slidev-addon-stem',
+    description: 'Slidev addon for scientific presentation',
+    tags: ['Component', 'Layout'],
+    author: {
+      name: 'yutaka-shoji',
+      link: 'https://github.com/yutaka-shoji',
+    },
+    repo: 'https://github.com/yutaka-shoji/slidev-addon-stem',
+  },
+  {
+    id: 'slidev-addon-naive',
+    name: 'Naive UI for Slidev',
+    description: 'Brings Naive UI components into Slidev',
+    tags: ['Component'],
+    author: {
+      name: 'Samuel Huang',
+      link: 'https://sghuang.com',
+    },
+    repo: 'https://github.com/sghuang19/slidev-addon-naive',
+  },
   // Add yours here!
   {
     id: '',

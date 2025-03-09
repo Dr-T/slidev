@@ -2,15 +2,15 @@ import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/ty
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { Argv } from 'yargs'
 import { exec } from 'node:child_process'
+import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
+import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } from 'ansis'
 import equal from 'fast-deep-equal'
-import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
-import { blue, bold, cyan, dim, gray, green, lightCyan, underline, yellow } from 'kolorist'
 import openBrowser from 'open'
 import yargs from 'yargs'
 import { version } from '../package.json'
@@ -20,6 +20,7 @@ import { resolveOptions } from './options'
 import { parser } from './parser'
 import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
+import { updateFrontmatterPatch } from './utils'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
@@ -224,7 +225,7 @@ cli.command(
         name: 'r',
         fullname: 'restart',
         action() {
-          initServer()
+          restartServer()
         },
       },
       {
@@ -420,13 +421,19 @@ cli.command(
           }
           const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
-          await fs.copy(root, path.resolve(dir), {
-            filter: i => !/node_modules|.git/.test(path.relative(root, i)),
-          })
+          await fs.mkdir(path.resolve(dir), { recursive: true })
+          await fs.cp(
+            root,
+            path.resolve(dir),
+            {
+              recursive: true,
+              filter: i => !/node_modules|\.git/.test(path.relative(root, i)),
+            },
+          )
 
           const dirPath = `./${dir}`
           const firstSlide = data.entry.slides[0]
-          firstSlide.frontmatter.theme = dirPath
+          updateFrontmatterPatch(firstSlide, { theme: dirPath })
           parser.prettifySlide(firstSlide)
           await parser.save(data.entry)
 
@@ -457,9 +464,9 @@ cli.command(
 
       if (options.data.config.browserExporter !== false && !warned) {
         warned = true
-        console.log(lightCyan('[Slidev] Try the new browser exporter!'))
+        console.log(cyanBright('[Slidev] Try the new browser exporter!'))
         console.log(
-          lightCyan('You can use the browser exporter instead by starting the dev server as normal and visit'),
+          cyanBright('You can use the browser exporter instead by starting the dev server as normal and visit'),
           `${blue('localhost:')}${dim('<port>')}${blue('/export')}\n`,
         )
       }
@@ -477,7 +484,7 @@ cli.command(
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
       server.close()
     }
 
@@ -538,7 +545,7 @@ cli.command(
         timeout,
         wait,
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
 
       server.close()
     }
